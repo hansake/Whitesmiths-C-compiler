@@ -4,7 +4,7 @@ The exported VM filename is: CO-IDRIS_DOS.ova
 (this VM image will be updated soon with some added tools.)
 
 When VirtualBox is installed, open CO-IDRIS_DOS.ova to import the VM.
-Then start the VM.
+Then start the VM, MS-DOS 6.22 will boot.
 
 Start Idris with the batch file IDR.BAT
 
