@@ -1,4 +1,6 @@
-Idris was an operating system developed by Whitesmiths
+Idris was an operating system developed by Whitesmiths.
+The C and Pascal compilers are are included with the Idris operating system,
+as well as a lot of other "Unix like" programs.
 
 [Idris (operating system) - Wikipedia](https://en.wikipedia.org/wiki/Idris_(operating_system))
 
