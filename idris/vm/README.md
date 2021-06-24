@@ -8,7 +8,7 @@ Then start the VM, MS-DOS 6.22 will boot.
 
 Start Idris with the batch file IDR.BAT
 
- C:\idr
+ C:\>idr
 
 return to DOS with the command quit
 
