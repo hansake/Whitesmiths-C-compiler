@@ -4,8 +4,9 @@ as well as a lot of other "Unix like" programs and utilities.
 
 [Idris (operating system) - Wikipedia](https://en.wikipedia.org/wiki/Idris_(operating_system))
 
-As I had access to the CO-IDRIS implementation for PC/MS-DOS on IBM PC I have
-created a virtual machine running CO-IDRIS in VirtualBox from some very dusty old diskettes.
+I found recently some old diskettes with the CO-IDRIS operating system for PC/MS-DOS on IBM PC that I was running many years ago.
+I have created a virtual machine in VirtualBox running CO-IDRIS in VirtualBox from some very dusty old diskettes.
+The VirtualBox I am using runs on a Linux Mint machine, but I expect that it may also run under Windows.
 
 I am also in the process of scanning the comprehensive set of manuals that
 were shippped with the Idris operating system.
