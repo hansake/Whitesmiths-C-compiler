@@ -10,8 +10,10 @@ Start Idris with the batch file IDR.BAT
 
  C:\>idr
 
-(when started idris will complain about invalid date, it was never intended to be used later then 1999)
-
 return to DOS with the command quit
 
  \# quit
+
+Updates:
+* updated date command to handle year > 1999
+* added simple make command
