@@ -12,6 +12,8 @@ Start Idris with the batch file IDR.BAT
 return to DOS with the command quit
 
  \# quit
+ 
+ To copy files between Linux and CO-IDRIS see: filecopy.txt
 
 Updates:
 * updated date command to handle year > 1999
