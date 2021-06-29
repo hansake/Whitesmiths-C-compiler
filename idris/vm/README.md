@@ -1,4 +1,4 @@
-This is the virtual machine for CO-IDRIS running in VirtualBox.
+This is a virtual machine for CO-IDRIS running in VirtualBox.
 
 The exported VM filename is: co-idris_ms-dos.ova
 (this VM image will be updated soon with some added tools.)
