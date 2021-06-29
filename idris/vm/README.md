@@ -18,4 +18,4 @@ Updates:
 * updated date command to handle year > 1999
 * added simple make command
 * /adm/init modified to start in multiuser mode, login as "root" or "pat"
-* login enabled at com1 and com2, connection to physical or virtual ports in VirtualBox
+* login enabled at com1 and com2, connection to physical or virtual ports in VirtualBox (see: terminals.txt)
