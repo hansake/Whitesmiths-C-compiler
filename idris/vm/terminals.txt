@@ -1,5 +1,5 @@
-It is possible to create a socket from VirtualBox and the a pty with socat
-in order to connect terminals to CO-IDRIS.
+It is possible to create a socket from VirtualBox connected to a pty 
+in Linux with socat in order to connect terminals to CO-IDRIS.
 
 The socat and minicom packages has to be inmstalled in the example below.
 This method is tested on Linux Mint.
