@@ -1,1 +1,1 @@
-Manuals for C and Pascal compilers.
+Manuals for C and Pascal compilers, edition 2.2.
