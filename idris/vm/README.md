@@ -17,7 +17,7 @@ return to DOS with the command quit
 
 Updates:
 * Updated date command to handle year > 1999
-* Added simple make command
+* Added simple make command. Note that the Makefile has a different syntax. The command make is a script that uses pp for pre-processing and makeprog for dependencies.
 * The file /adm/init modified to start in multiuser mode, login as "root" or "pat"
 * Login enabled at com1 and com2, connection to physical or virtual ports in VirtualBox (see: terminals.txt)
 * The emacs line editor mince added.
