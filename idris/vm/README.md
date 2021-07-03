@@ -13,7 +13,7 @@ return to DOS with the command quit
 
  \# quit
  
- To copy files between Linux and CO-IDRIS see: filecopy.txt
+ To copy files between Linux and CO-IDRIS (see: filecopy.txt)
 
 Updates:
 * Updated date command to handle year > 1999
