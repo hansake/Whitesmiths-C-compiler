@@ -21,3 +21,4 @@ Updates:
 * The file /adm/init modified to start in multiuser mode, login as "root" or "pat"
 * Login enabled at com1 and com2, connection to physical or virtual ports in VirtualBox (see: terminals.txt)
 * The emacs line editor mince added.
+* Cross compiler for CP/M-80 added, the C compiler command is ccpm80.
