@@ -1,0 +1,25 @@
+type b:limit
+pip a:=b:libc.80
+pip a:=b:crts.80
+era b:libc.80
+era b:crts.80
+era b:limit
+b:link -eb__memory -ed__edata -tb0x100 -htroa:link.com crts.80 b:link.o libc.80
+era b:link.o
+era b:link.com
+link -eb__memory -ed__edata -tb0x100 -htro b:anat.com crts.80 b:anat.o libc.80
+era b:anat.o
+link -eb__memory -ed__edata -tb0x100 -htro b:cpm.com crts.80 b:cpm.o libc.80
+era b:cpm.o
+link -eb__memory -ed__edata -tb0x100 -htrob:dis80.com crts.80 b:dis80.o libc.80
+era b:dis80.o
+link -eb__memory -ed__edata -tb0x100 -htro b:hex.com crts.80 b:hex.o libc.80
+era b:hex.o
+link -eb__memory -ed__edata -tb0x100 -htro b:lib.com crts.80 b:lib.o libc.80
+era b:lib.o
+link -eb__memory -ed__edata -tb0x100 -htro b:lord.com crts.80 b:lord.o libc.80
+era b:lord.o
+link -eb__memory -ed__edata -tb0x100 -htro b:rel.com crts.80 b:rel.o libc.80
+era b:rel.o
+era b:buildu.sub
+
