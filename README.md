@@ -8,6 +8,7 @@ When Whitesmiths released version 3.0 of its C compiler in 1985 it supported the
 The Whitesmiths compiler had code generators for DEC PDP-11, Intel 8080/Zilog Z80, Intel 8086, Motorola MC68000,
 DEC VAX-11, IBM System/370 and IBM System/36. It was commonly used as a cross compiler.
 
+[Whitesmiths - Wikipedia](https://en.wikipedia.org/wiki/Whitesmiths)
 
 In a mail from P.J Plauger he is positive to put code and documentation
 for the Whitesmiths C compilers in a public repository.
