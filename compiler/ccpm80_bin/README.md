@@ -5,7 +5,7 @@ The compiler was delivered on two diskettes and is installed by linking the obje
 for the different compiler phases and utilities with the CP/M specific libraries.
 For installation see the description in the file "instal.doc".
 
-I got a mail answer from P.J. Plauger giving limited rights to use the software at no cost provided that it
+I got a mail from P.J. Plauger giving limited rights to use the software at no cost provided that it
 is not used commercially.
 
 The installation and compilation of a simple program (echo.c) has been tested in a simulated
