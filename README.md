@@ -10,8 +10,5 @@ DEC VAX-11, IBM System/370 and IBM System/36. It was commonly used as a cross co
 
 [Whitesmiths - Wikipedia](https://en.wikipedia.org/wiki/Whitesmiths)
 
-In a mail from P.J Plauger he is positive to put code and documentation
-for the Whitesmiths C compilers in a public repository.
-
 Documentation and some code for the Idris operating system is also here.
 Idris was a Unix like operating system developed by Whitesmiths Ltd.
