@@ -1,0 +1,37 @@
+.NM p2gen.c generate code
+.FU
+p2gen.c contains the functions that expand code table entries into assembler
+text in the character pool.
+Also included are the escape functions used when code generation gets
+too twisty: in this case for the bit field coercions bitstou and utobits.
+bitstou unpacks a bitfield into a volatile unsigned, using the runtime
+function c.btou and an appropriately tailored setup, depending on the
+location of the unsigned.
+utobits does the simpler job of repacking a bitfield.
+Both use the utility function putos to build the runtime bitfield
+descriptor.
+.LP
+gen sets up the left, right, and result operands of a subtree at p, then
+calls genput to expand the code table entry.
+genput in turn calls on genad to generate address modes as needed.
+gen first calls genfl to stack any nonvolatile registers that may be
+clobbered in code generation, or that need rearranging at the last minute;
+genfl returns a set of flags to tell genput how to undo any damage
+it caused.
+The fix area of the result p is then set up, either to match the
+left operand or, if no result is actually computed, to look innocuous.
+.LP
+Junked operands have their resources liberated at this point,
+and compile time addition is performed whenever possible.
+The latter converts expressions like a[f()] to a[bc],
+often leading to smarter addition.
+Note, however, that entries of the form 1-4[hl] or 1-4[bc] are passed
+on, because in these cases the normal table entries are smarter than fmov.
+.LP
+genput takes the now setup subtree at p and expands the table entry tab
+accordingly.
+The codes used are described at the top of p2tab.c.
+.LP
+putnb simply puts out name+bias in the most sensible fashion for any
+combination of missing ingredients.
+xnm turns idx codes into text strings.

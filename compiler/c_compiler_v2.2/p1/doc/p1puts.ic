@@ -1,0 +1,81 @@
+p1puts.ic
+.NM p1puts.c put commands and expression trees
+.FU
+p1puts.c puts commands and expression trees from p1 to p2.
+The commands and tree formats are described in int12.h.
+.LP
+THe zero term, zeterm, is a handy term to have around
+for moving zero into an expression.
+.LP
+xtab is a table which maps the types used in p1,
+typtab, into types used by p2.
+Used by ptexpr.
+.LP
+relops, reflip, and jctab are tables whcih map the relational
+operators (relops, reflip)
+into operators (jctab) for p2.
+pjc, pjf, pjt use the tables.
+.LP
+nextsym, the created label number, starts at -1,
+and is incremented by two in crs() before return.
+Thus, created symbols from p1 begin at 1 and are odd.
+.LP
+lblname makes a label number (short),
+into a printable character string.
+The character string begins with a '>'
+and is mapped backwards from the integer, such that 0123 becomes ">321".
+This must match a similar algorithm in p2, since sometimes
+labels are passed both by name and by value for later matchup.
+.LP
+pend walks the littab (LITERAL) table,
+and for each double or string constant which is defined and used
+(p->sc not zero)
+puts it to p2.
+.LP
+pjc puts conditional jumps to p2.
+It maps relational operations into p2 operator commands,
+puts the label to jump and puts the left and right expressions
+which are compared by the operator.
+.LP
+pjf and pjt are responsible for putting jump on false
+and jump on true expressions,
+including &&, || and NOT operators.
+To outline pjf:
+.DS
+	if no expression to test
+		return false branch
+	else if (&&)
+		false branch = recurse (pjf) or left side
+		return label created by recursing on right side
+	else if (||)
+		true branch = recurse (pft) on left side
+		return label created by recursing on right side
+	else if (NOT)
+		return recurse on pjt
+	else if a relational
+		put a jump conditional flipping operator
+	else
+		put a jump conditioanl of operator EQUAL vs. the zeterm
+.DE
+.LP
+pmove builds a gets operator into a term,
+given the left and right side,
+and must typify the term before putting it to p2.
+.LP
+pswtab puts the branch table used by switch code.
+First,
+the label of the switch table is put,
+followed by pairs of label addresses and case values.
+Finally the default label, value are put.
+.LP
+pvoid, which is the conduit for expressions to p2, first calls docheck,
+to check whether the expression is meaningful.
+.LP
+rbuy buys a register of the allocatable set for use within a function.
+The expressions:
+.DS
+	*pset = set & (set - 1);
+		return (get ^ *pset);
+.DE
+.LP
+returns the rightmost element of a set and removes it from the set.

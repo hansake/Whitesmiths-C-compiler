@@ -1,0 +1,88 @@
+.NM p1 pass one of C compiler
+.FU
+p1 performs machine independent syntax analysis and pre-code
+generation typing and expression reduction.
+It reads encoded tokens from pp and writes encoded commands
+and expression trees to p2.
+The current file name and line number are passed from pp
+so that errors may be properly labelled.
+If any errors occur in p1, p2 is superfluous and should not be run.
+.LP
+Its basic data transform is to recognize sequences of external
+declarations:
+.IP "gscty -"
+builds storage class and type of the declaration into a prototype
+SYMBOL.
+gscty is at the top of a group of modules which
+recognize and build the complex types struct and union.
+gscty is used from all declaration contexts.
+.IP "gdecl -"
+adds the declaration name and other attributes to the prototype SYMBOL.
+gdecl is also
+used in other declaration contexts.
+.IP "main -"
+builds the symbol table of external declarations.
+main calls either fninit, to deal with functions, or
+datinit to deal with data declarations and possible initializers.
+.IP "fninit -"
+parses a complete function initializer.
+Included in function
+initializers are local declarations and executable statements.
+fninit breaks a function body into a series of
+expression evaluations embedded in a network of if's and goto's,
+sending commands to p2 to generate the appropriate machine code.
+.IP "datinit -"
+parses a data initializer and passes commands
+on to p2, which outputs the appropriate assembler directives.
+.LP
+Expressions are built for use by fninit or datinit using the
+following transforms:
+.IP "mexpr -"
+makes a complete expression tree.
+It gets tokens from the
+input stream and parses them top down.
+.IP "typify -"
+walks the expression, typing each operand and operation
+and checking for adherence to the rules of C.
+.IP "reduce -"
+performs compile time expression reduction on the typified
+tree.
+.LP
+The code is organized into several files:
+.IP "int01.h -"
+definitions common to pp and p1
+.IP "int012.h -"
+definitions common to all parts of the C compiler.
+.IP "int1.h -"
+data structures and type definitions peculiar to p1 but commom
+to all parts thereof.
+.IP "int12.h -"
+definitions common to p1 and p2.
+.IP "p1conf.c -"
+the configuration file, containing p1 machine dependencies.
+.IP "p1expr.c -"
+the expression parser for p1.
+The parser builds and returns a single
+complete expression tree.
+.IP "p1func.c -"
+parses a single function body, including argument declarations,
+auto and register declarations, and executable statements.
+.IP "p1gets.c -"
+does all input for p1.
+In particular gtok gets an encoded lexeme from pp
+and builds a TOKEN.
+.IP "p1main.c -"
+is the parser of external declarations, and, as such, the driver
+of p1.
+.IP "p1puts.c -"
+does all output for p1.
+It puts command language and expression trees
+to p2.
+.IP "p1red.c -"
+does all compile time expression reduction including constant
+evaluation, term commutation, subtree elimination and subtree movement.
+.IP "p1subs.c -"
+the subroutines used by various parts of p1.
+.IP "p1type.c -"
+forces all operands and operators to the correct type.
+Alters arrays and functions to scalars.

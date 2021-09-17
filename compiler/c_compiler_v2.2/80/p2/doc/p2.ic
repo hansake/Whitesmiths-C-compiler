@@ -1,0 +1,115 @@
+.NM p2 8080 pass 2 of C compiler
+.FU
+p2 generates code for the 8080.
+It reads encoded commands and expression trees
+from p1 and produces A-Natural assembler code.
+No error diagnostics are produced;
+if anything is seriously amiss, p2 will produce a PANIC
+message and quit.
+.LP
+Its principal data transform is:
+.IP "gexpr -"
+reads in expression trees for gcode and modifies them for 8080.
+.IP "gcode -"
+gets encoded data commands and puts them in the appropriate
+assembler directive form.
+It passes commands dealing with function bodies, e.g. expressions and jumps,
+on to main.
+.IP "main -"
+gets a sequence of function bodies and generates code for each
+into an in-core buffer which will be shortened and emitted.
+Flow of control is represented by a label table and a code graph,
+with the assembler code for each expression stored in a character pool.
+All expressions originate either as comparisons associated with conditional
+jumps or as computations to be "voided", i.e. to be computed and forgotten.
+.IP "jcond -"
+generates code for conditional jumps.
+.IP "void -"
+generates code for expression trees.
+.IP "shorten -"
+is the branch shortener, much of which applies to any machine,
+but some of which is peculiar to 8080.
+It visits sequences of code, trying whenever possible to
+eliminate redundant branches.
+It also eliminates unreachable code.
+.LP
+Code generation is performed by an intricate algorithm that looks through
+tables to find the best, i.e. shortest, code sequence for a given
+subexpression;
+it can backtrack and discard code if a given strategy proves hopeless.
+In principle, the generator must always succeed,
+but this depends upon a fragile and not fully understood series
+of relationships between the code tables and the driver routines,
+thus the panic messages when the impossible occurs.
+.LP
+Each item in an expression tree has room for "fixing", i.e. a scratch
+area in which is evolved the location where the result of each subcomputation
+ends up.
+The p->f fixing area is considered to be garbage as the generator
+descends a tree and is developed on the way back up;
+the code generator also cheerfully trashes the fixing areas of subtrees
+in the process of emitting code.
+.LP
+Retry strategy centers around the binary operators.
+The basic idea is to reduce the left and right subtrees each to a term,
+by calling fix recursively, then to do the operation.
+Subtrees are tried left first, then right first, then left with stacking.
+All may fail if there are insufficient register resources, but at the
+highest level (with r0, r1, bc, and hl) this should never happen.
+.LP
+The main flow through code generation of expressions is:
+.IP "void or jcond -"
+starts it all; fixes an expression.
+.IP "fix -"
+decides on an address descriptor for a term, or calls
+an operator specific function (e.g. binop) to reduce
+that subtree to an address descriptor.
+It then forces
+the term to the right address category based on wants and gots.
+.IP "force -"
+coerces the operand to the right type and storage class.
+It allocates machine resources, registers and stack,
+in doing so.
+.IP "binop -"
+fixes and forces both sides of a binary operator, usually
+after picking an appropriate table entry (pick in p2tab.c),
+and then it applies the table entry to the forced operands,
+generating code in the process.
+.IP "gen -"
+generates code into the character pool.
+It typically uses table
+entries, but also can use specialized functions to produce
+certain code sequences.
+Gives back registers.
+.LP
+The code is organized into several files:
+.IP "int12.h -"
+definitions common to p1 and p2.
+.IP "int012.h -"
+definitions common to all parts of the C compiler.
+.IP "int2.h -"
+data structures and type definitions peculiar to p2.
+.IP "p2expr.c -"
+contains those modules which work on expression trees, choosing
+the strategies for generating code, including largely machine
+independent functions (fix, binop, void) and machine
+dependent resource allocation and coercion (force).
+.IP "p2fmov.c -"
+contains encodings of the strategies to move scalar items from place to place
+among 8080 registers and memory.
+All this code is equivalent to that performed by a move instruction
+on more reasonable machines.
+.IP "p2gen.c -"
+does actual code generation, usually from tables residing in
+p2tab.c.
+.IP "p2jump.c -"
+contains those modules for generating code for jumps,
+boolean expressions, and function calls.
+.IP "p2main.c -"
+builds code graphs for functions, reduces branching, and emits code.
+.IP "p2subs.c -"
+are the functions used by all parts of p2 and the input of
+commands and expression trees from p1.
+.IP "p2tab.c -"
+contains the machine specific tables used to generate code
+along with the functions which perform low level input and output.

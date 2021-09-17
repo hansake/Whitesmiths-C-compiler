@@ -1,0 +1,22 @@
+.NM p2tab.c tables for code generation
+.FU
+p2tab.c contains the tables used for code generation,
+plus several unrelated functions for low-level input and output.
+.LP
+The table encodings are described clearly in the comment at the beginning
+of p2tab.c
+Usage of the text byte codes is found in p2gen.c.
+Be warned, however, that the ordering of each table is important, to ensure
+that there is always a strategy that succeeds.
+gettab, in particular, has been finely honed to balance optimization
+against completeness;
+muck around at your peril.
+.LP
+binops indexes bintab to select the appropriate code table.
+.LP
+getch and putch implement a simple buffering scheme that markedly improves
+execution time with little investment in space.
+putasm is a tailored format drived output routine that converts a number
+of internal shorthands into A-Natural code.
+It also returns a value carefully contrived to make emit work right
+in conjunction with chread.

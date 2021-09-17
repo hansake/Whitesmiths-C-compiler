@@ -1,0 +1,77 @@
+p1type.ic
+.NM p1type.c expression typing
+.FU
+p1type.c makes certain that each operator and
+operand in each expression has a valid C type,
+and furthermore, that the complex types, PTRTO, ARRAY, and FNRET,
+have been reduced to simple types.
+Thus p2 will only have to deal with the simple type.
+.LP
+tycodes is a table of type conversions which is mapped
+onto tyops to control operation of typify.
+.DS
+	0200	type the right side
+	0100	make right side scalar
+	0020	type the left side
+	0010	make left side scalar
+	0040	lvalue check
+	0004	type is max(l, r) integer or double
+	0002	type is max(l, r) integer
+	0001	type is type of left
+.DE
+.LP
+For example:
+.DS
+	LGETS is 0371
+	1.	determine type of right
+	2.	force right to scalar type
+	3.	determine type of left
+	4.	force left to scalar type
+	5.	lvalue test
+	6.	type is that of the left
+.DE
+.LP
+Note that bits are not tested purely left to right.
+.LP
+docheck checks whether the expression in question can possibly
+be meaningful in a freestanding context.
+For example, the statement:
+.DS
+		i - j;
+.DE
+.LP
+has no possible use, since the computation is merely discarded.
+.LP
+ptify turns q + const into q + const * sizeof (*q),
+relying on other optimizers to reduce the silly cases.
+The expression could have been written:
+.DS
+	lo = bytes(dety(ty), at);
+	right = buyterm(TINT, NULL, NULL, lo, 0, 0);
+	term = buyop(LTIMES, q, right);
+	return (setty(term, TINT, NULL));
+.DE
+.LP
+scalify makes a non-scalar term into a scalar.
+arrays are replaced by pointers to;
+functions returning are turned into pointers to whatever the type used to be.
+If the scalified term is not an operator, its refcount is reduced by one,
+otherwise it is preceded by an address of operator.
+.LP
+tfn determines the type of a function call.
+If there is no type set, it is to function returning integer;
+else if the type wasn't function returning, error;
+else if the type wasn't function returning scalar type, error.
+Then for each argument, reduce, scalify, and typify it.
+.LP
+tpoints checks -> (and .) operators differently depending
+on the state of the m flag.
+The logic here is delicate.
+.LP
+Balancing is done on the query colon operator in tquery.
+If either middle or right is pointer,
+set the type of the operator to the pointer's type;
+otherwise set the max up to double.
+In addition, cast the unlike side of middle, right to the type of the other.
+.LP
+untest looks for silly unsigned tests, such as u < 0, and gripes.
