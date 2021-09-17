@@ -15,3 +15,6 @@ To clean up the build directory:
 
 To clean up the build and distribution directories:
 * make distclean
+
+The source code versions are sometimes different from the binary distribution
+as I have collected various pieces of the code from different rather old diskettes.
