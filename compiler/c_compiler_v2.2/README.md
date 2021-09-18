@@ -1,6 +1,6 @@
 This directory contains the source code for Whitesmiths C compiler edition 2.2.
 It also contains Makefiles to cross compile a compiler for CP/M.
-I have used a cross compiler ported to a modern 64 bit system by Mike Ogden.
+I have used a cross compiler ported to a modern 64 bit system by Mark Ogden.
 
 To build a C compiler package for CP/M on 8080 run this command on the top level of the file tree:
 * make distr
