@@ -35,7 +35,7 @@ LOCAL VOID _error(mesg, fmt)
 		else
 			{
 			i =+ write(STDERR, "-[", 2);
-			for ( ; *fmt != ':'; ++fmt)
+			for ( ; *fmt && *fmt != ':'; ++fmt) /* PMO - bug fix */
 				if (*fmt == ',' && fmt[1] != ':')
 					i = putcw(STDERR, " ", i);
 				else if (*fmt == '>')
@@ -80,8 +80,16 @@ TEXT *getflags(pac, pav, fmt, args)
 			break;
 		if (*q == '-')
 			++q;
-		if (cmpbuf("help", q, 4))
-			_error((q[4] != ':' ? fmt + scnstr(fmt, ':') : &_data) + 1, fmt);
+		if (cmpbuf("help", q, 4)) { /* PMO bug fix */
+            TEXT *msg;
+            if (q[4] == ':')
+                msg = _data + 1;
+            else if (*(msg = fmt + scnstr(fmt, ':')))
+                msg++;
+            else
+                msg = "F";
+			_error(msg, fmt);
+        }
 		while (*q)
 			{
 			suc = NO;
