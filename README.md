@@ -10,5 +10,6 @@ DEC VAX-11, IBM System/370 and IBM System/36. It was commonly used as a cross co
 
 [Whitesmiths - Wikipedia](https://en.wikipedia.org/wiki/Whitesmiths)
 
-Documentation and some code for the Idris operating system is also here.
 Idris was a Unix like operating system developed by Whitesmiths Ltd.
+Documentation and some code for the Idris operating system is also here is moved to
+[hansake/Whitesmiths-Idris-OS](https://github.com/hansake/Whitesmiths-Idris-OS).
