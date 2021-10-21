@@ -15,7 +15,7 @@ The company's president from 1978 to 1988 was P. J. Plauger.
 I recieved an e-mail reply from P.J. Plauger on 3 Apr 2021 where he is positive to
 making the compiler available for download.
 
-<pjp>
+\<pjp>
   
 I own all rights to the Whitesmiths C compiler. if you want to go to the trouble
 to package it so that it can be downloaded from such a site, II'll be happy to
@@ -30,7 +30,7 @@ Best regards,
 
 P.J. Plauger
   
-</pjp>
+\</pjp>
 
 I have tried to get in contact with him to confirm that it is ok to put the
 C compiler in a public repository, but unfortunately I have not got any answer yet.
