@@ -1,0 +1,132 @@
+
+                                  int12.h
+
+
+
+NAME
+   int12.h - interface between C p1 and C p2
+
+FUNCTION
+   p1 sends a stream of commands to p2 that describes the code to be generated
+   in a rather machine independent fashion. int12.h descibes the  language  of
+   these commands, plus other constants common to the two passes.
+
+   Some  p2s requires that pointers be four bytes long (-l flag in p1), others
+   require that pointers be two bytes long. There is no explicit indication of
+   what p1 uses in the intermediate file, but  curious  behavior  of  p2  will
+   result if the wrong pointers are used.
+
+   REGISTERS - describe the machine independent register allocation. ARGIDX is
+        the  base  register  from  which arguments are referenced, counting up
+        from zero. AUTIDX is the  base  register  from  which  automatics  are
+        referenced,  counting  down  from zero. Results up to integer in width
+        are returned in INTRET, longs in LONGRET, and floats in FLTRET. REGSET
+        is the bit mask of all available allocatable registers. Note that  the
+        values chosen for these symbols are rather precious, since both p1 and
+        p2 depend upon subtle relationships among them.
+
+   CREATED OPERATORS - are those operators created by p1 and sent to p2: DADDR
+        is  the  &  unary  operator,  DALIST is the comma in an argument list,
+        DCAST is the cast operator, DGMIN  is  the  post  decrement  operator,
+        DELIST  is the comma in an expression list, DFNCALL is a function call
+        with arguments, DFNONLY is a function call with no arguments, DGPLU is
+        the post increment operator, DINDIR is the unary * operator, DMINUS is
+        the unary - operator, DPLUS is the  unary  +  operator,  DCMP  is  the
+        generic  comparison operator, DGETS is a form of = used in p1 to avoid
+        certain lvalue checks, DLESS is a generic  order  comparison  operator
+        used in some p2s.
+
+   PASS  TWO TYPES- describes the basic types sent between passes after FNRET,
+        ARRAY, and PTRTO have been eliminated.
+
+   INTERFACE  COMMANDS  -  are  those  commands  sent  between   passes.   The
+        intermediate file consists of zero or more commands, terminated by end
+        of file or a null command. The commands are:
+
+            GAUTOFF long		; current auto lo water mark
+            GCASE label			; a case label
+            GDATA bound name	; a data name and boundary
+            GDEF name			; a definition to be made external
+            GFLOAT count chars	; a 'count' length float constant
+            GFUNC name			; a function start
+            GGEQ
+            GGREAT
+            GINT count long		; a 'count' length integer constant
+            GISEQ
+            GJUMP label			; jump to label
+            GLABEL label		; a label
+            GLESS
+            GLEQ
+            GLITS bound name	; a literal name and boundary
+            GNOTEQ label l r	; l COND r jump label
+            GREF name			; a reference to external name
+
+
+
+
+
+                                   - 2 -
+
+
+            GREGS regs			; the current reg hi water mark
+            GRET				; a return statement
+            GSPACE count		; reserve 'count' bytes
+            GSTRING count str	; a string of 'count' bytes
+            GSWITCH label		; a switch statement
+            GVOID l				; gen code for expr l
+            GSWEND				; switch end
+            GSWTAB bound name	; a switch table name and boundary
+            GADDR+bnd name long	; gen an address constant
+
+   In  the  above,  name  consists  of  a  one  byte  length,  followed by the
+   appropriate number of name bytes; long is a four byte integer, label  is  a
+   two  byte  integer;  bound, count, and regs are one byte integers; str is a
+   sequence of length bytes; l and r are expression  trees;  and  bnd  is  the
+   boundary enforced for the address initializer, or 4 for a function address.
+
+   An  expression  is  recursively  defined  as either a ternary operator (?:)
+   followed  by  three  expressions;  a  binary  operator,  followed  by   two
+   expressions;  a  unary  operator,  followed  by  one;  or  a zero operator,
+   followed by a term. In all cases,  the  type  of  the  result  follows  the
+   operator  as  a  single  byte;  if  the  type is XPTRTO, its high four bits
+   contains a bnd as for GADDR, giving the boundary  enforced  for  the  thing
+   pointed  to.  A  term  consists  of  a  name, a long offset, an idx byte to
+   specify a  base  register,  and  a  refs  byte  to  specify  the  level  of
+   indirection.
+
+   The address of a general term in p1 or p2 is:
+
+       refs	value
+        0		&name+offset[idx]
+        1		 name+offset[idx]
+        2		*name+offset[idx]
+        3		**name+offset[idx]
+       etc.
+
+   i.e.,  an  optional  symbolic location name, plus a long offset, optionally
+   indexed by a register; where (refs == 0) implies the address itself,  (refs
+   == 1) implies direct addressing, and higher values of refs implies indirect
+   addressing  to  one  or  more  levels. If only idx is nonzero, the register
+   contents is implied; if only offset is nonzero, a long resolution  constant
+   is implied; if all fields are zero, a constant zero is implied.
+
+   Note  that  there  are  additional  semantic  constraints  imposed  on this
+   language, such as correspondence between  labels  and  jumps,  location  of
+   function  headers,  etc.  Since p2 is not equipped to diagnose user errors,
+   this file is always assumed to be well formed semantically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

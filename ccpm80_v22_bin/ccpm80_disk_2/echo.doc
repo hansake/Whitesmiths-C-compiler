@@ -1,0 +1,67 @@
+
+
+
+
+echo                             User Manual                              echo
+
+
+NAME
+    echo - copy arguments to STDOUT
+
+SYNOPSIS
+    echo -[m n] <args>
+
+FUNCTION
+    echo copies its arguments to STDOUT.  They are not interpreted in any way,
+    and  may  be  arbitrary  strings.   By  default,  the arguments are output
+    separated by a single space;  the last argument is terminated by a newline
+    character.  If there are no arguments, nothing is output.
+
+    The flags are:
+
+    -m   output each argument on a separate line.
+
+    -n   suppress the newline following the last argument.
+
+RETURNS
+    echo returns success if there are no arguments or if  all  characters  are
+    successfully written.
+
+EXAMPLE
+    To make a one-line message file:
+
+         % echo happy new year! >motd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

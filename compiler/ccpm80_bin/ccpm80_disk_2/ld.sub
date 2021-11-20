@@ -1,3 +1,0 @@
-link -eb__memory -ed__edata -htr -tb0x100 crts.80 $1.o libu.80 libc.80
-ren $1.com=xeq
-

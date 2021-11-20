@@ -1,6 +1,0 @@
-pp -o $1.tm1 -x -i i: utext.h $1.c
-p1 -o $1.tm2 -b0 -n8 -u $1.tm1
-p280 -o $1.s $1.tm2
-era $1.tm?
-as80 $1.s
-era $1.s

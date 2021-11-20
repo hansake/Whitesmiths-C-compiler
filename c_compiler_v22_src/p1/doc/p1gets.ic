@@ -1,0 +1,68 @@
+.NM p1gets.c input to p1
+.FU
+p1gets.c contains the set of functions necessary
+for passing input from pp to p1;
+and allied functions used for error and recovery processing.
+.LP
+The neelex and neestr tables map tokens for which
+the need function call is made,
+into strings which can be printed if the needed
+token is not the current one.
+.LP
+Since the compiler can get ahead of itself while
+reading input for the top down parsing scheme,
+a stack has been provided to hold those
+tokens which have been input but not eaten
+by parsing.
+The depth of the stack, NTOKQ, is three;
+this is more than the compiler should ever need.
+The stack itself is a stack of TOKENs,
+which is the form input takes;
+tokens are put back onto the stack through
+one portal, baktok, and are taken off the
+stack only by gettok.
+ntoks is 0 for an empty stack.
+.LP
+The modules alt, eat, ident, need, and peek
+form a constellation of input portals.
+alt returns the next token in the input stream,
+if it matches one of a passed set;
+the set should include a NULL at the end.
+eat returns the next token in the input stream.
+ident returns the next token in the input
+stream if it is an identifier or a NULL.
+need requires the next token to match
+the token passed.
+peek looks ahead in the input stream
+and passes back the token if it matches, or a NULL.
+.LP
+baktok and gettok implement the token stack mechanism.
+.LP
+error, nmerr, and recover are the error printing
+and recovery mechanisms.
+error and nmerr print:
+.DS
+	[ filename: ] linenumber: message
+.DE
+.LP
+for each error.
+nmerr prints an identifier name in the error message.
+recover is necessary to avoid going crazy on
+recognizing bad syntactic forms.
+recover first prints an error message and then scans
+forward until reaching an end-of-file,
+a semicolon, or a right curly bracket.
+End-of-files and semicolons are put back onto the
+input stream,
+whereas right curly brackets are consumed.
+.LP
+gtok actually gets tokens from STDIN.
+The current file name is built dynamically
+in infile;
+that is, each time a new file name is encountered,
+it is allocated and the old name is freed.
+End-of-file is recognized on either an explicit EOF,
+or on reading a null character.
+This is required, since some operating
+systems pad the last block with nulls.
+getint is used throughout to build integers.

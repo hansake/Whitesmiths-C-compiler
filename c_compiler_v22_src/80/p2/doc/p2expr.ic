@@ -1,0 +1,152 @@
+.NM p2expr.c code generation for expressions
+.FU
+p2expr.c contains the modules used for generating code from expression trees,
+including retry strategies and resource allocation.
+.LP
+The code within p2 is sprinkled with #ifdef DEBUG statements.
+If modules in p2 are compiled with -dDEBUG, when that compiler is run with
+the -p option in p2
+a great deal of debugging output is produced.
+This is the only way to debug a new code generator.
+.LP
+binop first saves choff, chsiz and set in case it has not enough resources
+to generate code and must roll back;
+a binop failure generally causes higher levels in the recursive code
+generation to try another strategy.
+.LP
+There are two methods for picking a code table entry:
+the entry can be passed down from getsop for in place computation of
+the form L op= R;
+or the entry can be selected internally, permitting the left operand to be
+widened or copied if necessary, for the form L op R.
+The resource class which the left and right sides "want" is set
+from the table entry, with several modifiers.
+In particular, left sides of compares and "to be nullified" operators
+(where want & WNULL) and all right sides are set as candidates for
+junking after code is generated.
+If a pointer is acceptable, then a pointer on the stack must always
+be acceptable, since gen is capable of rescuing stacked pointers just
+before code generation;
+this is an important safety valve.
+Note also how volatility is smuggled down via the GRVOL kludge.
+rty is set either from the table or, for constants in the table,
+from the right type.
+.LP
+The strategy codes LR, RL, and LTR in binop refer to the order in which code
+generation for binary operators is done:
+LR fixes the left operand and then the right operand;
+RL fixes the right and then the left;
+and LTR fixes the left operand first,
+tempifies the result (i.e. liberates a volatile register),
+then fixes the right.
+One of these strategies must succeed always,
+given the use of r0, r1, bc, and hl at the highest level.
+.LP
+fix guarantees to return an address descriptor in the f subfield,
+so that, for instance, to fix a term (case 0),
+fix copies the address descriptor from e.v to f,
+and then, as always, forces the expression to the right type and storage class.
+The binary operators call binop;
+post increment and post decrement operators call postop;
+assigning operators call getsop;
+and various testing operators call boolify.
+The unary operators generally fix the left side
+and take some reasonable action for that operator.
+All fixed expressions are "forced" to the correct type and storage class.
+.LP
+The algorithm for force is:
+.DS
+	if (!ty [only cc needed])
+		all done
+	if (only want reduced to a term)
+		all done
+	else if (want to NULLify result)
+		give back any volatile resources
+		all done
+	if (can't force proper type via ftyp)
+		give up
+	if (must reref to compute a pointer)
+		fgen(reref) to bc || hl
+	if (must deref to reduce ref count)
+		fgen(deref) to bc || hl
+	if (using a quasi-register)
+		fgen(intreg) to bc || hl
+	else if (address of extern)
+		fgen(ptmov) to bc || hl
+	if (got what we want)
+		all done
+	else
+		fgen(pick a table) to pick a place
+	mark result as volatile
+	all done
+.DE
+.LP
+The result of force is always a refcount of zero (immediate, register)
+or one (memory, pointer in a register).
+.LP
+Note well that force comes closest to being the heart of the code generation
+strategy.
+It is certainly the most machine dependent part of p2 and is responsible
+for much of the code quality.
+It should also be considered quite fragile, since small errors can result
+in large cracks in the compiler.
+.LP
+ftyp is an auxiliary routine of force to ensure that the term is of
+proper type before any additional forcing is attempted.
+It does its level best to coerce a term of improper type into bc,
+if small enough, or r0 or r1, if an rvalue will do, or into a pointer in bc
+otherwise.
+This strategy is magic, but it seems to give good code most of the time
+and it rarely turns up a failure, though God only knows why.
+.LP
+getsop is the code generator for the various assigning operators.
+The left side is fixed into a pointer,
+then an attempt is made to pick a table entry for performing the
+operation in place.
+If the pointer ended up in bc or hl, and the operation cannot be done in place
+(!tab), then don't even try to do the binop before tempifying;
+otherwise try the binop and tempify only if it fails.
+Tempification in this case tries to free any volatile register used by
+the left side pointer, so that binop can be retried.
+Avoiding the first binop attempt is another bit of magic that gives
+good results for uncertain reasons.
+The predicate (set & !tab) says that code generation succeeded (set is
+non-empty) and that the operation was not done in place (tab was picked
+in binop, not getsop);
+hence the result must be moved back.
+.LP
+move sets up an LGETS operator with the left and right as passed to it
+and calls getsop.
+GRVOL is used to smuggle down whether the right side should be discarded
+on the move;
+this can safely be considered a design flaw.
+.LP
+postop is another delicate routine that seems to require suboptimal code
+generation to work safely.
+The address of the left side must be determined, as in getsop, so that
+the increment can be performed in place;
+but a copy of the old value must first be captured in a way that will not
+interfere with discarding temporary pointers, etc.
+Hence, the pointer must be fixed into bc, hl, or a direct memory reference,
+and the result is always left on the stack to keep it out
+of the way.
+.LP
+vfix is a kludge to fix left sides of binary operators in those cases
+where they must be made volatile.
+The normal compiler strategy permits this information to be captured
+in the choice of wants;
+however, the 8080 p2 was designed without a clear distinction between
+volatile and nonvolatile wants.
+The want BC, for instance, can match either a constant or an operand in bc.
+This bit of magic ensures that things that must be volatile are truly
+forced so.
+.LP
+void generates code for expressions,
+asking that the expression be nulled via WNULL.
+If any resource is lost at any time during code generation, void panics.
+The resulting code is introduced onto the code graph via a GCODE entry giving
+the number of bytes of VAX memory required for the sequence and an offset
+into the character pool of the start of text.
+Each text segment in the pool is terminated by a grave `,
+which works in a clever fashion between putasm and emit to stop code emission
+at the proper place.
