@@ -43,7 +43,7 @@ P.J. Plauger
 I have tried to get in contact with him to confirm that it is ok to put the
 C compiler in a public repository, but unfortunately I have not got any answer yet.
 
-## Where to find the different compiler
+## Where to find the different compilers
 
 The Whitesmiths C Compiler for CP/M-80 Edition 2.2 in binary format is in the "ccpm80_v22_bin" directory.
 The manuals for Edition 2.2 compilers are in the "compiler_v22_doc" directory.
