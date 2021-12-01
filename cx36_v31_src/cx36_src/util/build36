@@ -1,0 +1,101 @@
+HOW TO BUILD A NEW DISTRIBUTION OF C/36
+=======================================
+
+============
+* COMPILER *
+============
+
+If the compiler is changed then move it to virtual disk E:\C36\P236.EXE
+and make a new distribution diskette with the batch file E:\MKCDISK.BAT
+this will format a diskette in B: and transfer files to it.
+
+	CD E:\
+	MKCDISK
+
+=============
+* LIBRARIES *
+=============
+
+On Idris11
+==========
+
+Build a new version on Idris11 with
+
+	/wsl/l30/cmds/doit.36
+
+On Idris11/PC
+=============
+
+transfer all library files to IBM PC-XT using a virtual disk E:
+Disk E: is on a file on S/36 named PCDISKE.
+
+/wsl/l30/ship/86/dos/pkg/cssp36/liba/* --kermit--> E:\LIBA
+/wsl/l30/ship/86/dos/pkg/cssp36/libb/* --kermit--> E:\LIBB
+/wsl/l30/ship/86/dos/pkg/cssp36/libc/* --kermit--> E:\LIBC
+/wsl/l30/ship/86/dos/pkg/cssp36/libm/* --kermit--> E:\LIBM
+/wsl/l30/ship/86/dos/pkg/cssp36/libw/* --kermit--> E:\LIBW
+/wsl/l30/ship/86/dos/pkg/cssp36/libp/* --kermit--> E:\LIBP
+
+move all changed header files to E:\C36\HDRS
+move all changed system interface source files to E:\C36\SYSINT
+
+On S/36
+=======
+
+To move assembler files to S/36 and assemble them there run:
+
+	ASMLIBS
+
+(this will disable the printer spool writer and take quite a while,
+after this job is done, cancel all entries in the spool file and
+restart the spool writer)
+
+Then move the object files to libraries:
+
+	BUILDLIB
+
+The libraries than has to be transfered to pc-disk files.
+
+1.	make temporary work files with:
+
+	MKWRKFIL
+
+2.	switch to pc mode
+
+On PC
+=====
+
+3.	format and transfer C libraries to disk 2 and 3.
+
+	E>MKPCDISK
+
+4.	if you also make Pascal, format and transfer library to disk.
+
+	E>MKPCPDSK
+
+Tools
+=====
+
+Mk36pro			idr11:	builds procedure files for asm on S/36
+asmlibs			s/36:	executes procedure files built by Mk36pro
+backupli		s/36:	back libraries on s/36 HD diskettes
+buildlib		s/36:	copy object libraries
+calib.tfr		pc:		used by copylibs.bat
+calib.tto		pc:		used by mkpcdisk.bat
+calink			s/36:	procedure to link ANSI C programs, in #CALIB
+cealib.tfr		pc:		used by copylibs.bat
+cealib.tto		pc:		used by mkpcdisk.bat
+cealink			s/36:	procedure to link Extended ANSI C programs, in #CEALIB
+copylibs.bat	pc:		copy C libraries at install
+copyplib.bat	pc:		copy Pascal library at install
+cplib.tfr		pc:		used by copyplib.bat
+cplib.tto		pc:		used by mkpcpdsk.bat
+frwrk36.bat		pc:		transfer asm src to S/36 WRKLIB from pc
+mkcdisk.bat		pc:		make distribution diskette for C executables
+mkpcdisk.bat	pc:		make library diskettes for C
+mkpcpdsk.bat	pc:		make library diskettes for Pascal
+mkpdisk.bat		pc:		make distribution diskette for Pascal executables
+mkwrkfil		s/36:	make workfiles with libraries for transfer to pc
+pclink			s/36:	procedure to link Pascal programs, in #CPLIB
+runcmd			s/36:	procedure to get and run procedures from pc disk E:
+towrk36.bat		pc:		transfer asm src from S/36 to pc

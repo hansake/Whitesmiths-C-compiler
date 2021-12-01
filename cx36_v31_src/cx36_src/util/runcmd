@@ -1,0 +1,5 @@
+* S/36 procedure to get a file from an virtual pc-disk
+* and execute it as an S/36 procedure
+* Copy E:\ARG2\ARG1 to procedure ARG1 in #library and execute it
+// PCU ,DISKLIBR,?1R?,PCDISKE,?2R?,?1?,P,#LIBRARY,REPLACE
+// JOBQ #LIBRARY,?1?

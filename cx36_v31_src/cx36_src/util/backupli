@@ -1,0 +1,6 @@
+* S/36 procedure to backup C libraries on disk
+// ** 'Insert diskette'
+INIT C36LIB,OWNERID,FORMAT2
+SAVELIBR #CALIB,999,C36LIB
+SAVELIBR #CEALIB,999,C36LIB
+SAVELIBR #CPLIB,999,C36LIB

@@ -1,0 +1,8 @@
+* S/36 procedure to get library asm sources and
+* assemble them
+// RUNCMD ASMLIBA,LIBA
+// RUNCMD ASMLIBB,LIBB
+// RUNCMD ASMLIBC,LIBC
+// RUNCMD ASMLIBM,LIBM
+// RUNCMD ASMLIBP,LIBP
+// RUNCMD ASMLIBW,LIBW

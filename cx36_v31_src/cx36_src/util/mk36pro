@@ -1,0 +1,32 @@
+: script to make a procedure file that gets and assembles
+:	source files on S/36
+test $1 == -help || goto nohelp
+echo usage: $0 [-mac] \<library\> \<files\>
+exit NO
+: nohelp
+set m NOMAC
+test $1 == -mac || goto nomac
+set m MAC
+shift
+: nomac
+set t /tmp/t$$
+set l $1
+echo NOHALT 4,JOB > $t1
+echo REMOVE ALL,SOURCE,$l >> $t1
+echo REMOVE ALL,SUBR,$l >> $t1
+echo CONDENSE $l >> $t1
+echo SLIB $l >> $t1
+echo \* get asm sources >> $t1
+echo \* assemble > $t2
+: loop
+shift
+test $1 || goto end
+set f -p.asm $1
+test $f.asm != $1 && goto loop
+echo // PCU ,DISKLIBR,$f.asm,PCDISKE,$l,$f,S,$l,REPLACE >> $t1
+echo ASM $f,$l,,$m,,,,,,NOLIST >> $t2
+goto loop
+: end
+cat $t1 $t2 | tr -tA-Z a-z
+rm -s $t1 $t2
+exit YES

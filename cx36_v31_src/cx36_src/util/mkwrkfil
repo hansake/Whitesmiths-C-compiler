@@ -1,0 +1,7 @@
+* System/36 procedure member.
+* Creates work files from libraries
+* these work files are to be copied to PC files
+*
+FROMLIBR ALL,LIBRARY,WRKCEALI,F1,T,150,#CEALIB
+FROMLIBR ALL,LIBRARY,WRKCALIB,F1,T,150,#CALIB
+FROMLIBR ALL,LIBRARY,WRKCPLIB,F1,T,150,#CPLIB

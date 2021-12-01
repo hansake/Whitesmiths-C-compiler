@@ -1,0 +1,42 @@
+ OPTIONS NOXREF
+*************************************************************************
+*  COPYRIGHT (C) 1986 BY UNISOFT AB, SWEDEN                             *
+*                                                                       *
+*  @DSUB:   Substract double by double for IBM System/36                *
+*                                                                       *
+*       left operand in AC0+0                                           *
+*       WR7 points to first byte of right operand                       *
+*       return value in AC0+0                                           *
+*                                                                       *
+*************************************************************************
+*
+@DSUB    START 0
+*
+#XR1     EQU   X'01'
+#XR2     EQU   X'02'
+#ARR     EQU   X'08'
+#IAR     EQU   X'10'
+#WR4     EQU   X'44'
+#WR5     EQU   X'45'
+#WR6     EQU   X'46'
+#WR7     EQU   X'47'
+*
+         EXTRN @AC0
+         EXTRN @FP
+         EXTRN @XR2
+*
+         EXTRN @FENTR
+         EXTRN @FLEAV
+         EXTRN @WR7SA
+*
+         LA    NEXTIN,#WR6         address scientific instruction
+         BD    @FENTR
+*
+NEXTIN   EQU   *
+         $XLD  @WR7SA              load index register
+         $DLD  @AC0+0              load floating point reg. double prec.
+         $DSUB 0,I                 substract, double prec.
+         $DST  @AC0+0              store floating point reg. double prec.
+         $INVK @FLEAV              return to caller
+*
+         END
