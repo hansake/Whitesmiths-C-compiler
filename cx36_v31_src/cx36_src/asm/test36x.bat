@@ -1,1 +1,1 @@
-x36 +e +l testx36.s
+x36 +e +l test36x.s
