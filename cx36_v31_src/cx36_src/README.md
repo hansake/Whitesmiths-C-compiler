@@ -7,4 +7,3 @@
 * p2: code generators for S/36 assembler language
 * ssp: SSP systrem interface library
 * util: scripts to upload/download programs betwees PC and S/36
-* 
