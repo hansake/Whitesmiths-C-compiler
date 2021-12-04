@@ -1,7 +1,0 @@
--b 0xf000
-+h
--ps 4
-+text -f4 -o0
-+data -f4 -o0
-+bss  -f4 -b0
-/c/lib/Crtss.86

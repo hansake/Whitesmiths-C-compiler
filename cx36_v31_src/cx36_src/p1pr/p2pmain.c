@@ -12,6 +12,8 @@
 GLOBAL FILE errfd = {STDERR};
 GLOBAL FILE outfd = {STDOUT};
 
+TEXT *_pname = {"p1pr"};
+
 LOCAL TEXT *ofile = {NULL};
 
 /*	print output of p1

@@ -78,7 +78,7 @@ TEXT *gname(s)
 
 /*	make a name from label
  */
-TEXT *ln(label)
+TEXT *lbn(label)
 	FAST LABEL label;
 	{
 	FAST TEXT *s;

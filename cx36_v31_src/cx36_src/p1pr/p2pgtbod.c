@@ -22,7 +22,7 @@ LEX printgtbody()
 			putfmt("GDBFUNC %i\n", glabel());
 			break;
 		case GDBSTAT:
-			putfmt("GDBSTAT %p\n", ln(glabel()));
+			putfmt("GDBSTAT %p\n", lbn(glabel()));
 			break;
 		case GAUTOFF:
 			gint(&lo);
@@ -32,13 +32,13 @@ LEX printgtbody()
 			putfmt("GREGS %o\n", needch());
 			break;
 		case GJUMP:
-			putfmt("GJUMP %p\n", ln(glabel()) );
+			putfmt("GJUMP %p\n", lbn(glabel()) );
 			break;
 		case GSWITCH:
-			putfmt("GSWITCH %p\n", ln(glabel()) );
+			putfmt("GSWITCH %p\n", lbn(glabel()) );
 			break;
 		case GLSWITCH:
-			putfmt("GLSWITCH %p\n", ln(glabel()) );
+			putfmt("GLSWITCH %p\n", lbn(glabel()) );
 			break;
 		case	GSWEND:
 			putfmt("GSWEND\n");
@@ -48,7 +48,7 @@ LEX printgtbody()
 			lb = glabel();
 			lin= glabel();
 			putfmt("%p %p\nlineno=%s\n",
-				(tok == GCASE) ? "GCASE" : "GLABEL", ln(lb), lin);
+				(tok == GCASE) ? "GCASE" : "GLABEL", lbn(lb), lin);
 			break;
 		case	GRET:
 			putfmt("GRET\n");
@@ -68,7 +68,7 @@ LEX printgtbody()
 		case	GISEQ:
 			index++;
 		case	GNOTEQ:
-			putfmt("%p %p\n", gops[index], ln(glabel()) );
+			putfmt("%p %p\n", gops[index], lbn(glabel()) );
 			printgexpr(2);
 			printgexpr(2);
 			index = 0 ;
