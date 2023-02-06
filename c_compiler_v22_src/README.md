@@ -24,3 +24,5 @@ To clean up the local build directory:
 
 The source code versions are sometimes different from the binary distribution
 as I have collected various pieces of the code from different rather old diskettes.
+
+The cross compiler tools to build are in: https://github.com/hansake/Z80_Computer/tree/main/software/tools/wsl
